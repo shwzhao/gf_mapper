@@ -4,7 +4,7 @@ import argparse
 from commands import map, alter
 
 def main():
-    parser = argparse.ArgumentParser(prog='df_mapper', description='Comparative genomics analysis toolkit')
+    parser = argparse.ArgumentParser(prog='df_mapper', description='GFF and FASTA file id mapping.')
     subparsers = parser.add_subparsers(title='subcommands', dest='subcommand')
 
     map.setup_parser(subparsers)

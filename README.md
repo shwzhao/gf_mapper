@@ -17,17 +17,17 @@ dependences:
 
 ```
 gf_mapper -h
-usage: df_mapper [-h] {gff2idmap,alter} ...
-
-Comparative genomics analysis toolkit
-
-options:
-  -h, --help         show this help message and exit
-
-subcommands:
-  {gff2idmap,alter}
-    gff2idmap        Convert GFF file to ID_MAP format
-    alter            Get longest isoform or rename isoforms according to ID_MAP and FASTA (cds/pep) files
+## usage: df_mapper [-h] {gff2idmap,alter} ...
+## 
+## GFF and FASTA file id mapping.
+## 
+## options:
+##   -h, --help         show this help message and exit
+## 
+## subcommands:
+##   {gff2idmap,alter}
+##     gff2idmap        Convert GFF file to ID_MAP format
+##     alter            Get longest isoform or rename isoforms according to ID_MAP and FASTA (cds/pep) files
 ```
 
 
@@ -44,41 +44,41 @@ grep -c ">" GCF_034140825.1_ASM3414082v1_protein.faa GCF_034140825.1_ASM3414082v
 ## GCF_034140825.1_ASM3414082v1_cds_from_genomic.fna:42933
 
 grep -v "#" GCF_034140825.1_ASM3414082v1_genomic.gff | cut -f 3 | sort | uniq -c
-242528 CDS
-1637 cDNA_match
-341091 exon
-37483 gene
-   1 intron
-   2 inverted_repeat
-6551 lnc_RNA
-42933 mRNA
-   1 match
-1910 pseudogene
-   3 pseudogenic_tRNA
-1756 rRNA
-  15 region
- 489 sequence_feature
-  71 snRNA
- 611 snoRNA
- 708 tRNA
-3927 transcript
+## 242528 CDS
+## 1637 cDNA_match
+## 341091 exon
+## 37483 gene
+##    1 intron
+##    2 inverted_repeat
+## 6551 lnc_RNA
+## 42933 mRNA
+##    1 match
+## 1910 pseudogene
+##    3 pseudogenic_tRNA
+## 1756 rRNA
+##   15 region
+##  489 sequence_feature
+##   71 snRNA
+##  611 snoRNA
+##  708 tRNA
+## 3927 transcript
 ```
 
 ### 3.2 id mapping
 ```
 gf_mapper map -h                                            
-usage: df_mapper map [-h] -g GFF_FILE [-o OUTPUT_FILE] [-t TRANS_MRNA_INFO_TO] [-e EXTRA_INFO]
-
-options:
-  -h, --help            show this help message and exit
-  -g GFF_FILE, --gff_file GFF_FILE
-                        Path to gff file
-  -o OUTPUT_FILE, --output_file OUTPUT_FILE
-                        Path to the output file. [id_mapping.txt]
-  -t TRANS_MRNA_INFO_TO, --trans_mRNA_info_to TRANS_MRNA_INFO_TO
-                        Transcript or mRNA. [mRNA]
-  -e EXTRA_INFO, --extra_info EXTRA_INFO
-                        Extra information that you need, for example: -e "mRNA::Dbxref;gene::gbkey". [NULL]
+## usage: df_mapper map [-h] -g GFF_FILE [-o OUTPUT_FILE] [-t TRANS_MRNA_INFO_TO] [-e EXTRA_INFO]
+## 
+## options:
+##   -h, --help            show this help message and exit
+##   -g GFF_FILE, --gff_file GFF_FILE
+##                         Path to gff file
+##   -o OUTPUT_FILE, --output_file OUTPUT_FILE
+##                         Path to the output file. [id_mapping.txt]
+##   -t TRANS_MRNA_INFO_TO, --trans_mRNA_info_to TRANS_MRNA_INFO_TO
+##                         Transcript or mRNA. [mRNA]
+##   -e EXTRA_INFO, --extra_info EXTRA_INFO
+##                         Extra information that you need, for example: -e "mRNA::Dbxref;gene::gbkey". [NULL]
 ```
 
 ```
@@ -157,8 +157,8 @@ gf_mapper alter \
   -m 15 \
   -n 3 \
   -d
-The number of sequences inputed: 42933.
-The number of sequences generated: 42933.
+## The number of sequences inputed: 42933.
+## The number of sequences generated: 42933.
 
 grep ">" output.fa | head -5                                                                     
 ## >rna-XM_066304510.1
