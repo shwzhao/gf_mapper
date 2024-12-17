@@ -13,7 +13,7 @@ def main():
     args = parser.parse_args()
 
     if args.subcommand:
-        if args.subcommand == 'gff2idmap':
+        if args.subcommand == 'map':
             map.run(args)
         elif args.subcommand == 'alter':
             alter.run(args)

@@ -53,7 +53,8 @@ def parse_gff(gff_file, mRNA_Type='mRNA', extra_columns=''):
 
             elif Type == mRNA_Type:
                 rna_id = attr_dict.get('ID', '')
-                gene_id = attr_dict.get('Parent', '')
+                # gene_id = attr_dict.get('Parent', '')
+                gene_id = attr_dict.get('Parent', rna_id)
                 transcript_name = attr_dict.get('Name', rna_id)
                 mrna_id_mapping[rna_id] = {
                     'gene_id': gene_id,
@@ -94,6 +95,16 @@ def parse_gff(gff_file, mRNA_Type='mRNA', extra_columns=''):
             if rna_attr['CDS_length'] > gene_id_mapping[gene_id]['max_length']:
                 gene_id_mapping[gene_id]['max_length'] = rna_attr['CDS_length']
                 gene_id_mapping[gene_id]['longest_mRNA'] = rna_id
+        else:
+            gene_id_mapping[gene_id] = {
+                'gene_name': rna_id,
+                'longest_mRNA': '',
+                'max_length': 0
+            }
+            gene_id_mapping[gene_id]['max_length'] = rna_attr['CDS_length']
+            gene_id_mapping[gene_id]['longest_mRNA'] = rna_id
+            print(f"Warning: mRNA {rna_id}'s gene parent not found in gene id line. Map it's gene id/name to itself ({rna_id}).")
+
 
     return gene_id_mapping, mrna_id_mapping, extra_columns
 
@@ -142,17 +153,15 @@ def write_idmapping_file(gene_id_mapping, mrna_id_mapping, extra_columns, output
                             output_data.append(rna_attr.get(f'Extra_CDS_{col}', '-'))
                 f.write('\t'.join(map(str, output_data)) + '\n')
             except KeyError:
-                print(f"Warning: {gene_id} not found in gene_id_mapping. Skipping update.")
+                print(f"Error: mRNA {rna_id} update failed. Please check.")
 
 
 def setup_parser(parser):
-    idmap_parser = parser.add_parser('gff2idmap', help='Convert GFF file to ID_MAP format')
+    idmap_parser = parser.add_parser('map', help='Convert GFF file to ID_MAP format')
     idmap_parser.add_argument('-g', '--gff_file', required=True, help='Path to gff file')
     idmap_parser.add_argument('-o', '--output_file', default='id_mapping.txt', help='Path to the output file. [id_mapping.txt]')
     idmap_parser.add_argument('-t', '--trans_mRNA_info_to', default='mRNA', help='Transcript or mRNA. [mRNA]')
     idmap_parser.add_argument('-e', '--extra_info', help='Extra information that you need, for example: -e "mRNA::Dbxref;gene::gbkey". [NULL]')
-    idmap_parser.add_argument('--only_coding_gene', action='store_true', help='only map pep coding gene ID')
-
     return idmap_parser
     '''
     如果-e有除了gene和mRNA的情况, 需要同时改变-t参数, 如果改变了-t参数, 就不能再得到mRNA的其他信息

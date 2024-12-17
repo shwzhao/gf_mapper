@@ -4,7 +4,8 @@ import sys
 def read_gene_transcript_mapping(mapping_file, match_column=3, map_column=1):
     gene_transcripts = {}
     try:
-        with open(mapping_file) as f:
+        from commands.read_data import open_file
+        with open_file(mapping_file) as f:
             next(f)
             for line in f:
                 name_list = line.strip().split('\t')
@@ -23,7 +24,8 @@ def read_gene_transcript_mapping(mapping_file, match_column=3, map_column=1):
 def read_transcript_sequences(transcript_file):
     transcript_sequences = {}
     try:
-        with open(transcript_file) as f:
+        from commands.read_data import open_file
+        with open_file(transcript_file) as f:
             for record in SeqIO.parse(f, 'fasta'):
                 match_name = record.id
                 sequence = str(record.seq)
@@ -103,7 +105,7 @@ def setup_parser(parser):
         'alter', 
         help='Get longest isoform or rename isoforms according to ID_MAP and FASTA (cds/pep) files'
     )
-    alter_parser.add_argument('-i', '--idmapping_file', required=True, help='Path to the gene-transcript mapping file')
+    alter_parser.add_argument('-i', '--idmapping_file', required=True, help='Path to the ID_MAP file')
     alter_parser.add_argument('-f', '--fasta_file', required=True, help='Path to the transcript sequences file')
     alter_parser.add_argument('-o', '--output_file', default='output.fa', help='Path to the output file. [output.fa]')
     alter_parser.add_argument('-m', '--match_column',  type=int, default=3, help='Column for match_name in mapping file. [3]')
