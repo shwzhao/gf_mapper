@@ -62,6 +62,29 @@ grep -v "#" GCF_034140825.1_ASM3414082v1_genomic.gff | cut -f 3 | sort | uniq -c
 ##  611 snoRNA
 ##  708 tRNA
 ## 3927 transcript
+
+
+grep ">" GCF_034140825.1_ASM3414082v1_protein.faa | head -5
+## >NP_001347129.1 FIP1[III]-like protein precursor [Oryza sativa Japonica Group]
+## >NP_001347130.1 uncharacterized protein LOC111828501 [Oryza sativa Japonica Group]
+## >NP_001347559.1 very-long-chain (3R)-3-hydroxyacyl-CoA dehydratase PASTICCINO 2B [Oryza sativa Japonica Group]
+## >NP_001347560.1 uncharacterized protein LOC111946217 [Oryza sativa Japonica Group]
+## >NP_001348069.1 asparagine synthetase domain-containing protein 1 [Oryza sativa Japonica Group]
+
+grep ">" GCF_034140825.1_ASM3414082v1_cds_from_genomic.fna | head -5
+## >lcl|NC_089035.1_cds_XP_066160607.1_1 [gene=LOC4326813] [db_xref=GeneID:4326813] [protein=uncharacterized protein isoform X1] [protein_id=XP_066160607.1] [location=join(7851..8018,8759..8857,9859..9962,11538..12346,12430..12552,12634..13010,13612..14019,14506..14589,14676..14699)] [gbkey=CDS]
+## >lcl|NC_089035.1_cds_XP_066160611.1_2 [gene=LOC4326813] [db_xref=GeneID:4326813] [protein=uncharacterized protein isoform X1] [protein_id=XP_066160611.1] [location=join(7851..8018,8759..8857,9859..9962,11538..12346,12430..12552,12634..13010,13612..14019,14506..14589,14676..14699)] [gbkey=CDS]
+## >lcl|NC_089035.1_cds_XP_015622096.1_3 [gene=LOC4326813] [db_xref=GeneID:4326813] [protein=rab GTPase-activating protein 22 isoform X2] [protein_id=XP_015622096.1] [location=join(7851..8018,8759..8857,9859..9962,11538..12346,12430..12552,12634..12722,12810..13010,13612..14019,14506..14589,14676..14699)] [gbkey=CDS]
+## >lcl|NC_089035.1_cds_XP_066160617.1_4 [gene=LOC4326813] [db_xref=GeneID:4326813] [protein=rab GTPase-activating protein 22 isoform X2] [protein_id=XP_066160617.1] [location=join(7851..8018,8759..8857,9859..9962,11538..12346,12430..12552,12634..12722,12810..13010,13612..14019,14506..14589,14676..14699)] [gbkey=CDS]
+## >lcl|NC_089035.1_cds_XP_066160620.1_5 [gene=LOC4326813] [db_xref=GeneID:4326813] [protein=uncharacterized protein isoform X3] [protein_id=XP_066160620.1] [location=join(7851..8018,8759..8857,9859..9962,11538..12346,12430..12552,12685..12722,12810..13010,13612..14019,14506..14589,14676..14699)] [gbkey=CDS]
+
+sed -i '/>/ s/>.*protein_id=/>/g;s/].*//g' GCF_034140825.1_ASM3414082v1_cds_from_genomic.fna
+grep ">" GCF_034140825.1_ASM3414082v1_cds_from_genomic.fna | head -5
+## >XP_066160607.1
+## >XP_066160611.1
+## >XP_015622096.1
+## >XP_066160617.1
+## >XP_066160620.1
 ```
 
 ### 3.2 id mapping
@@ -83,7 +106,8 @@ gf_mapper map -h
 
 ```
 gf_mapper map \
-  -g GCF_034140825.1_ASM3414082v1_genomic.gff
+  -g GCF_034140825.1_ASM3414082v1_genomic.gff \
+  -e "gene::Dbxref;CDS::Name"
 ## Warning: rna-NC_001751.1:1732..2019 not found in gene_id_mapping. Skipping update.
 ## Warning: rna-NC_001751.1:1793..2035 not found in gene_id_mapping. Skipping update.
 
@@ -137,7 +161,11 @@ grep ">" output.fa | head -5
 
 - Change CDS name to mRNA ID. And get the longest isoforms.
 ```
-gf_mapper alter -i id_mapping.txt -f GCF_034140825.1_ASM3414082v1_protein.faa -m 15 -n 3
+gf_mapper alter \
+  -i id_mapping.txt \
+  -f GCF_034140825.1_ASM3414082v1_protein.faa \
+  -m 15 \
+  -n 3
 ## The number of sequences inputed: 42933.
 ## The number of sequences generated: 29429.
 
